@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pitch | Projeto AURA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* --- CONFIGURAÇÕES GERAIS E TEMA --- */
+        :root {
+            --color-dark: #0a0a0a;
+            --color-light: #f5f5f5;
+            --color-accent: #00e0b8;
+            --color-accent-transparent: rgba(0, 224, 184, 0.2);
+            --color-text-dark: #1a1a1a;
+            --color-text-light: #e0e0e0;
+            --color-text-muted: #a0a0a0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-dark);
+            color: var(--color-text-light);
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .presentation {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .presentation::-webkit-scrollbar {
+            display: none;
+        }
+
+        .slide {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 5vh 5%;
+            scroll-snap-align: start;
+            position: relative;
+        }
+        
+        /* --- ESTILOS DE TEXTO --- */
+        h1, h2, h3 { text-align: center; }
+        h1 { font-size: 5rem; font-weight: 900; line-height: 1.1; }
+        h2 { font-size: 3.2rem; font-weight: 700; margin-bottom: 3rem; max-width: 900px; }
+        h3 { font-size: 1.5rem; font-weight: 400; color: var(--color-text-muted); }
+        p { font-size: 1.4rem; line-height: 1.7; max-width: 800px; text-align: center; }
+        strong { color: var(--color-accent); font-weight: 700; }
+
+        /* SLIDE 1: CONTEXTO */
+        #contexto p { font-size: 2.8rem; max-width: 1100px; font-weight: 700; }
+        #contexto h3 { margin-top: 2rem; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 2px; }
+        .dasa-logo { position: absolute; top: 40px; left: 5%; width: 120px; opacity: 0.7; }
+
+        /* SLIDE 2: PROBLEMA */
+        #problema { background-color: #111; }
+        .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; width: 100%; max-width: 1200px; }
+        .problem-card { border: 1px solid #333; background-color: var(--color-dark); padding: 2rem; text-align: left; border-radius: 8px; transition: transform 0.2s ease-in-out, border-color 0.2s ease-in-out; }
+        .problem-card:hover { transform: translateY(-10px); border-color: var(--color-accent); }
+        .problem-card h4 { font-size: 1.7rem; color: var(--color-accent); margin-bottom: 1rem; }
+        .problem-card p { font-size: 1.1rem; text-align: left; color: var(--color-text-muted); line-height: 1.6; }
+
+        /* SLIDE 3: DADOS */
+        #dados { background-color: var(--color-light); color: var(--color-text-dark); }
+        #dados h2 { color: var(--color-text-dark); }
+        .data-showcase { display: flex; justify-content: space-around; width: 100%; max-width: 1300px; text-align: center; }
+        .data-point { padding: 2rem; }
+        .data-point .number { font-size: 8rem; font-weight: 900; color: var(--color-accent); line-height: 1; }
+        .data-point p { color: #555; font-size: 1.1rem; max-width: 280px; font-weight: 500; }
+
+        /* SLIDE 4: SOLUÇÃO */
+        #solucao > p { margin-bottom: 3rem; }
+        .solution-container { display: flex; gap: 5rem; align-items: flex-start; width: 100%; max-width: 1200px; }
+        .solution-item { flex: 1; text-align: left; }
+        .solution-item .icon { font-size: 3rem; color: var(--color-accent); margin-bottom: 1rem; width: 60px; }
+        .solution-item h4 { font-size: 2rem; margin: 1rem 0; color: var(--color-text-light); }
+        .solution-item p { font-size: 1.2rem; text-align: left; color: var(--color-text-muted); line-height: 1.6; }
+        #solucao p.tagline { margin-top: 3rem; font-weight: 700; font-size: 1.8rem; }
+        
+        /* SLIDE 5: DEMONSTRAÇÃO */
+        .demo-screen {
+            width: 100%;
+            max-width: 980px;
+            height: 54vh;
+            background: radial-gradient(800px 500px at 50% -20%, #0e1b1a 0%, #091211 40%, #060808 70%, #050505 100%);
+            border: 1px solid #2a2a2a;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1rem;
+            box-shadow: 0 18px 60px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(255,255,255,0.04), 0 0 0 1px rgba(0,224,184,0.08);
+        }
+        .demo-screen::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(0deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 22px 22px, 22px 22px;
+            opacity: 0.18;
+            pointer-events: none;
+        }
+        .demo-screen::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(80% 60% at 50% 60%, transparent 60%, rgba(0,0,0,0.6) 100%);
+            pointer-events: none;
+        }
+        .demo-screen canvas { position: relative; z-index: 1; display: block; }
+        .microscope-view {
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 20% 30%, #4a223a, transparent 40%),
+                              radial-gradient(circle at 80% 70%, #2a3a4a, transparent 40%),
+                              radial-gradient(circle at 50% 50%, #1a1a2a, #050505 70%);
+            filter: blur(2px);
+            position: absolute;
+            top: 0; left: 0;
+        }
+        .highlight-overlay {
+            position: absolute;
+            border: 2px solid var(--color-accent);
+            border-radius: 50%;
+            background-color: var(--color-accent-transparent);
+            box-shadow: 0 0 20px var(--color-accent-transparent);
+            animation: pulse 2.5s infinite ease-in-out;
+        }
+        .highlight-1 { top: 20%; left: 15%; width: 150px; height: 150px; }
+        .highlight-2 { top: 50%; left: 60%; width: 120px; height: 120px; animation-delay: 0.5s; }
+        .highlight-3 { top: 65%; left: 30%; width: 80px; height: 80px; animation-delay: 1s; }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+        #demonstracao p { font-size: 1.2rem; color: var(--color-text-muted); max-width: 700px; margin-top: 2rem; }
+
+        /* SLIDE 6: EXEMPLIFICAÇÃO */
+        #exemplificacao { background-color: #111; }
+        .flow-container { width: 100%; max-width: 800px; }
+        .flow-step { padding: 1rem 0; border-bottom: 1px solid #333; }
+        .flow-step:last-child { border-bottom: none; }
+        .flow-step h4 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+        .flow-step h4 span { color: var(--color-accent); margin-right: 1.2rem; font-weight: 900; font-size: 1.8rem; }
+        .flow-step p { font-size: 1.1rem; text-align: left; padding-left: 3.5rem; color: var(--color-text-muted); }
+
+        /* --- SLIDE 7: CONCLUSÃO (CORREÇÃO DE LAYOUT) --- */
+        #conclusao-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+        #conclusao .conclusion-list {
+            flex: 1; /* Ocupa o espaço disponível */
+            text-align: left;
+            max-width: 600px;
+        }
+        #conclusao .conclusion-list p {
+            text-align: left;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-text-muted);
+        }
+        #conclusao .conclusion-list p:last-child {
+            margin-bottom: 0;
+        }
+        #conclusao .conclusion-list p strong {
+            display: block;
+            font-size: 1.5rem;
+            color: var(--color-text-light);
+            margin-bottom: 0.25rem;
+        }
+        #conclusao .final-statement {
+            flex-basis: 40%; /* Define uma base de largura */
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.3;
+            text-align: left;
+            padding-left: 3rem;
+            border-left: 3px solid var(--color-accent);
+        }
+
+    </style>
+</head>
+<body>
+
+<main class="presentation">
+
+    <section class="slide" id="contexto">
+        <svg class="dasa-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 60" fill="#fff"><path d="M11.6 24.8c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9zm0 14c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zM35.4 24.8c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9zm0 14c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zM59.2 24.8c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9zm0 14c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zM83 24.8c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9zm0 14c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zM106.8 24.8c-5 0-9 4-9 9s4 9 9 9 9-4 9-9-4-9-9-9zm0 14c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5z"/></svg>
+        <p>No futuro da saúde, a liderança não é uma opção. É uma <strong>obrigação</strong>.</p>
+        <h3>A Dasa não apenas participa. Nós construímos.</h3>
+    </section>
+
+    <section class="slide" id="problema">
+        <h2>O Paradoxo da Patologia Moderna</h2>
+        <div class="problem-grid">
+            <div class="problem-card"><h4>Escassez Crítica</h4><p>Déficit alarmante: Apenas <strong>1,6 patologistas</strong> por 100 mil habitantes no Brasil, quando a OMS recomenda 5.</p></div>
+            <div class="problem-card"><h4>Pressão por Volume</h4><p><strong>Volume e complexidade</strong> de exames crescem, mas as ferramentas não evoluem. O resultado: risco de burnout.</p></div>
+            <div class="problem-card"><h4>O Custo do Erro</h4><p>Em alta pressão, o erro diagnóstico custa recursos, tempo e, o mais grave: <strong>impacta a vida do paciente</strong>.</p></div>
+            <div class="problem-card"><h4>Estagnação Ergonômica</h4><p>O trabalho analógico e repetitivo é um <strong>risco ocupacional</strong> que limita a produtividade e o bem-estar do especialista.</p></div>
+        </div>
+    </section>
+
+    <section class="slide" id="dados">
+        <h2>O Diagnóstico do Nosso Sistema</h2>
+        <div class="data-showcase">
+            <div class="data-point"><div class="number">15%</div><p>Taxa de diagnósticos iniciais <strong>incorretos</strong> em câncer ao chegar em hospitais de referência.</p></div>
+            <div class="data-point"><div class="number">4.4k</div><p>Total de patologistas no Brasil. Precisamos de um <strong>aumento de capacidade</strong> tecnológico.</p></div>
+            <div class="data-point"><div class="number">$825M</div><p>Mercado global de patologia digital até 2025. Uma oportunidade para <strong>liderar com inovação</strong>.</p></div>
+        </div>
+    </section>
+
+    <section class="slide" id="solucao">
+        <h2>Apresentando <strong>AURA</strong></h2>
+        <p>Não é uma ferramenta. É uma plataforma de inteligência que amplifica a capacidade de nossos especialistas.</p>
+        <div class="solution-container">
+            <div class="solution-item">
+                <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208ZM120,80v40a8,8,0,0,1-16,0V80a8,8,0,0,1,16,0Zm56,48a8,8,0,0,1-8,8H152v16a8,8,0,0,1-16,0V136H120v16a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h16V104a8,8,0,0,1,16,0v16h16V104a8,8,0,0,1,16,0v16h16a8,8,0,0,1,8,8Z"></path></svg></div>
+                <h4>Inteligência Preditiva</h4>
+                <p>Nossa IA atua como um "segundo olhar", destacando áreas de interesse e padrões sutis para <strong>aumentar a precisão</strong>.</p>
+            </div>
+            <div class="solution-item">
+                <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 256 256"><path d="M239.2,119.1,148.9,28.8a15.9,15.9,0,0,0-22.6,0L36.8,118.4a15.9,15.9,0,0,0,0,22.6l90.3,90.3a15.9,15.9,0,0,0,22.6,0l89.5-89.5a15.9,15.9,0,0,0,0-22.7ZM184,112H144v40a8,8,0,0,1-16,0V112H88a8,8,0,0,1,0-16h40V56a8,8,0,0,1,16,0V96h40a8,8,0,0,1,0,16Z"></path></svg></div>
+                <h4>Hardware Fluido</h4>
+                <p>Uma estação de trabalho ergonômica com pedais para navegação. Controle hands-free que <strong>aumenta a eficiência</strong>.</p>
+            </div>
+        </div>
+        <p class="tagline">AURA: o elo entre o talento do médico e o poder da máquina.</p>
+    </section>
+
+    <section class="slide" id="demonstracao">
+        <h2>AURA em Ação: O Co-piloto do Patologista</h2>
+    <div class="demo-screen" id="demo-3d-scan"></div>
+    <p>Visual 3D: varredura sobre a lâmina com hotspots que intensificam quando passam sob a linha de escaneamento.</p>
+    </section>
+
+    <section class="slide" id="exemplificacao">
+        <h2>Fluxo de Análise AURA</h2>
+        <div class="flow-container">
+            <div class="flow-step"><h4><span>1.</span> Digitalização</h4><p>O sistema AURA captura e digitaliza a lâmina em alta definição instantaneamente.</p></div>
+            <div class="flow-step"><h4><span>2.</span> Navegação</h4><p>Navegação fluida com pedais. O especialista explora a amostra com as mãos livres.</p></div>
+            <div class="flow-step"><h4><span>3.</span> Análise Aumentada</h4><p><strong>Em tempo real</strong>, a IA analisa o campo de visão e destaca potenciais anomalias na tela.</p></div>
+            <div class="flow-step"><h4><span>4.</span> Decisão</h4><p>O patologista emite o laudo final com <strong>máxima confiança e agilidade</strong>.</p></div>
+        </div>
+    </section>
+
+    <section class="slide" id="conclusao">
+        <h2>Redefinindo o Padrão de Cuidado</h2>
+        <div id="conclusao-content">
+            <div class="conclusion-list">
+                <p><strong>Liderança em Inovação</strong>Nos posiciona como líderes, definindo o novo padrão da indústria.</p>
+                <p><strong>Fortalecimento da Confiança</strong>Menos erros e mais agilidade solidificam a confiança de médicos e pacientes.</p>
+                <p><strong>Atração de Talentos</strong>Cria o ambiente de trabalho mais avançado para atrair e reter os melhores patologistas.</p>
+            </div>
+            <div class="final-statement">
+                O futuro do diagnóstico não é substituir médicos. É dar a eles <strong>superpoderes</strong>.
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const presentation = document.querySelector('.presentation');
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        let isScrolling = false;
+
+        function navigateTo(slideIndex) {
+            if (isScrolling || slideIndex < 0 || slideIndex >= slides.length) {
+                return;
+            }
+            isScrolling = true;
+            
+            const targetSlide = slides[slideIndex];
+            targetSlide.scrollIntoView({ behavior: 'smooth' });
+
+            setTimeout(() => {
+                isScrolling = false;
+            }, 700);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            e.preventDefault();
+            
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    navigateTo(currentSlide);
+                }
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    navigateTo(currentSlide);
+                }
+            }
+        });
+
+        presentation.addEventListener('scroll', () => {
+            if (isScrolling) return;
+            
+            const currentScroll = presentation.scrollTop;
+            const slideHeight = window.innerHeight;
+            currentSlide = Math.round(currentScroll / slideHeight);
+        });
+
+        // --- 3D Scan Demo (Lâmina com hotspots) ---
+        const container = document.getElementById('demo-3d-scan');
+        if (container && window.THREE) {
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x050505);
+
+            const camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 100);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setPixelRatio(window.devicePixelRatio || 1);
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            // Plano da lâmina
+            const planeGeo = new THREE.PlaneGeometry(6, 3.5, 1, 1);
+            const uniforms = {
+                u_time: { value: 0 },
+                u_hotspots: { value: [
+                    new THREE.Vector2(0.20, 0.30),
+                    new THREE.Vector2(0.55, 0.40),
+                    new THREE.Vector2(0.38, 0.72),
+                    new THREE.Vector2(0.78, 0.60),
+                    new THREE.Vector2(0.30, 0.18),
+                    new THREE.Vector2(0.68, 0.25)
+                ] },
+            };
+
+            const vertexShader = `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `;
+
+            const fragmentShader = `
+                precision highp float;
+                varying vec2 vUv;
+                uniform float u_time;
+                uniform vec2 u_hotspots[6];
+
+                float gaussian(float d, float s) {
+                    return exp(-(d*d) / (2.0 * s * s));
+                }
+
+                vec3 palette(float t) {
+                    // Gradiente frio -> acento (verde/água)
+                    vec3 cold = vec3(0.02, 0.10, 0.12);
+                    vec3 hot  = vec3(0.00, 0.88, 0.72);
+                    return mix(cold, hot, t);
+                }
+
+                void main() {
+                    // Ajuste leve na escala UV para “margens”
+                    vec2 uv = vUv * 0.96 + 0.02;
+
+                    // Linha de varredura horizontal (varre no eixo X)
+                    float scanPos = mod(u_time * 0.12, 1.0);
+                    float w = 0.06; // largura da faixa
+                    float scan = smoothstep(scanPos - w, scanPos, uv.x) * (1.0 - smoothstep(scanPos, scanPos + w, uv.x));
+
+                    // Hotspots
+                    float intensity = 0.0;
+                    for (int i = 0; i < 6; i++) {
+                        float d = distance(uv, u_hotspots[i]);
+                        float base = gaussian(d, 0.12);
+                        // Intensifica quando a linha passa próximo
+                        float boost = base * (1.0 + scan * 2.0);
+                        intensity += boost;
+                    }
+
+                    // Linha por si só adiciona leve destaque
+                    intensity = max(intensity, scan * 0.25);
+                    intensity = clamp(intensity, 0.0, 1.0);
+
+                    // Vinheta sutil
+                    float vignette = smoothstep(1.2, 0.5, distance(uv, vec2(0.5)));
+                    float t = clamp(intensity * vignette, 0.0, 1.0);
+
+                    vec3 color = palette(t);
+                    // Glow sutil conforme intensidade
+                    color += vec3(0.00, 0.12, 0.10) * pow(t, 2.0);
+
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `;
+
+            const planeMat = new THREE.ShaderMaterial({
+                uniforms,
+                vertexShader,
+                fragmentShader,
+                transparent: false,
+            });
+            const plane = new THREE.Mesh(planeGeo, planeMat);
+            plane.rotation.x = -0.48;
+            plane.rotation.y = 0.18;
+            scene.add(plane);
+
+            // Borda leve sob a lâmina (sombra)
+            const shadowGeo = new THREE.PlaneGeometry(6.2, 3.7);
+            const shadowMat = new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.25 });
+            const shadow = new THREE.Mesh(shadowGeo, shadowMat);
+            shadow.position.set(0, -0.025, 0);
+            shadow.rotation.x = plane.rotation.x;
+            shadow.rotation.y = plane.rotation.y;
+            shadow.position.z = -0.2;
+            scene.add(shadow);
+
+            // Luz ambiente para dar volume ao conjunto
+            scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+            const rim = new THREE.DirectionalLight(0x00e0b8, 0.35);
+            rim.position.set(-3, 3, 4);
+            scene.add(rim);
+
+            // Centralizar e enquadrar a lâmina
+            function fitCamera() {
+                const w = container.clientWidth;
+                const h = container.clientHeight;
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+                const fovRad = THREE.MathUtils.degToRad(camera.fov);
+                const planeWidth = 6;
+                const planeHeight = 3.5;
+                const fitMargin = 0.86;
+                const distH = (planeHeight / 2) / Math.tan(fovRad / 2) / fitMargin;
+                const distW = (planeWidth / 2) / Math.tan(Math.atan(Math.tan(fovRad / 2) * camera.aspect)) / fitMargin;
+                const dist = Math.max(distH, distW);
+                camera.position.set(0, 0.55, dist + 0.6);
+                camera.lookAt(0, 0, 0);
+            }
+            fitCamera();
+
+            // Animação
+            const clock = new THREE.Clock();
+            function animate() {
+                requestAnimationFrame(animate);
+                uniforms.u_time.value += clock.getDelta();
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Responsivo
+            function onResize() {
+                const w = container.clientWidth;
+                const h = container.clientHeight;
+                renderer.setSize(w, h);
+                fitCamera();
+            }
+            window.addEventListener('resize', onResize);
+        }
+    });
+</script>
+
+</body>
+</html>
